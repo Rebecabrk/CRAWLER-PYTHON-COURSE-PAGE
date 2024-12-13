@@ -48,9 +48,26 @@ for lab_number, anchor in enumerate(filtered_a_tags):
         with open(f'lab{lab_number + 2}/lab{lab_number + 2}.py', 'w') as f:
             for i in range(len(li)):
                 exercise_statement = f'"""\n{li[i].text.replace("\n", "")}\n"""\n'
+                words = exercise_statement.split()
+                lines = [' '.join(words[i:i+15]) for i in range(0, len(words), 15)]
+                exercise_statement = '\n'.join(lines)
+                exercise_statement = exercise_statement.replace('"""', f'"""\n')
                 f.write(exercise_statement)
-                exercise_function = f'def ex{i+1}():\n    pass\n'
-                f.write(exercise_function)
+
+                if re.search(r'\bclass\b', exercise_statement):
+                    pattern = r'(?<!\.\s)(\b[A-Z][a-zA-Z]*)'
+                    class_names = re.findall(pattern, exercise_statement)
+                    class_names = [n for n in class_names if n != 'Write' and n != 'Create' and n != 'Python' and n != 'None' and n != 'Design' and n != 'NxM' and len(n) > 1]
+
+                    if lab_number + 2 == 5 and i == len(li) - 1:
+                        class_names.append('Matrix')
+
+                    for class_name in class_names:
+                        exercise_class = f'class {class_name}:\n    pass\n'
+                        f.write(exercise_class)
+                else:
+                    exercise_function = f'def ex{i+1}():\n    pass\n'
+                    f.write(exercise_function)
         print(f'Lab {lab_number + 2} created.')
     else:
         print(f'Lab {lab_number + 2} already exists.')
