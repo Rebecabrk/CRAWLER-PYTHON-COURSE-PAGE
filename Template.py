@@ -65,6 +65,10 @@ for lab_number, anchor in enumerate(filtered_a_tags):
                     for class_name in class_names:
                         exercise_class = f'class {class_name}:\n    pass\n'
                         f.write(exercise_class)
+                elif re.search(r'\bThe\s(\w+)\sfunction\b', exercise_statement):
+                    function_name = re.search(r'\bThe\s(\w+)\sfunction\b', exercise_statement).group().split()[1]
+                    exercise_function = f'def {function_name}():\n    pass\n'
+                    f.write(exercise_function)
                 else:
                     exercise_function = f'def ex{i+1}():\n    pass\n'
                     f.write(exercise_function)
