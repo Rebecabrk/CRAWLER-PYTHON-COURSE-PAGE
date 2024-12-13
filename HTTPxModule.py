@@ -56,13 +56,19 @@ class RequestPythonCoursePage(RequestWebPage):
         Metoda care obtine continutul paginii web a cursului de Python de la FII.
         """
         return super().get_web_page()
+
+    def get_base_url(self):
+        """
+        Metoda care returneaza URL-ul de baza al paginii web de python de la FII.
+        """
+        return 'https://gdt050579.github.io/python-course-fii/'
     
 
 if __name__ == '__main__':
     try:
         python_webpage = RequestPythonCoursePage()
         text = python_webpage.get_web_page()
-        with open('python_webpage.html', 'w') as f:
+        with open('Resources/python_webpage.html', 'w') as f:
             f.write(text)
     except ValueError as e:
         print(e)
