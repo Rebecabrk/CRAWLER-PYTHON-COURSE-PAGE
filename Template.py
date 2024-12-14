@@ -20,8 +20,13 @@ def write_function_name(statement, exercise_number, file):
         function_name = re.search(r'\bThe\s(\w+)\sfunction\b', statement).group().split()[1]
         exercise_function = f'def {function_name}():\n    pass\n'
         file.write(exercise_function)
-    elif '(' in statement and statement.split('(')[0].strip().isidentifier():
-        function_name = statement.split('(')[0].strip()
+    elif '(' in statement:
+        pattern = r'\b([a-zA-Z_][a-zA-Z0-9_]*)\('
+        function = re.search(pattern, statement)
+        if function and function.group(1) != 'len':
+            function_name = function.group(1)
+        else:
+            function_name = f'ex{exercise_number}'
         exercise_function = f'def {function_name}():\n    pass\n'
         file.write(exercise_function)
     else:
